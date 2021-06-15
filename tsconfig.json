@@ -3,7 +3,8 @@
     "lib": ["ESNext"],
     "module": "ESNext",
     "target": "ES2017",
-    "strict": true
+    "strict": true,
+    "rootDir": "src",
   },
   "exclude": ["node_modules"]
 }
