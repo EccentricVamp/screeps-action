@@ -1,0 +1,7 @@
+{
+  "name": "screeps-action",
+  "description": "Github action for Screeps",
+  "main": "index.js",
+  "license": "Unlicense",
+  "repository": "https://github.com/EccentricVamp/screeps-action.git"
+}
