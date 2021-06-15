@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "target": "ES2017",
+    "strict": true
+  },
+  "exclude": ["node_modules"]
+}
