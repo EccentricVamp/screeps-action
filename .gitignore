@@ -1,0 +1,3 @@
+# Node.js artifacts
+/node_modules
+/package-lock.json
