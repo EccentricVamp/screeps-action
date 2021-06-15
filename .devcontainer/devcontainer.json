@@ -1,0 +1,5 @@
+// https://aka.ms/devcontainer.json
+{
+  "name": "TypeScript Actions",
+  "dockerFile": "Dockerfile"
+}
