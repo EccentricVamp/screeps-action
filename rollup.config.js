@@ -1,15 +1,27 @@
 "use strict";
 
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 
-export default {
+/**
+ * @type {import("rollup").RollupOptions}
+ */
+const config = {
   input: "src/index.ts",
   output: {
-    file: "dist/index.js",
+    dir: "dist",
     format: "cjs",
-    interop: "esModule"
+    interop: "esModule",
+    exports: "auto"
   },
   plugins: [
-    typescript({ tsconfig: "./tsconfig.json" })
+    commonjs(),
+    json(),
+    resolve(),
+    typescript()
   ]
-}
+};
+
+export default config;

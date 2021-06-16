@@ -1,0 +1,9 @@
+name: 'Screeps action'
+description: 'Deploys JavaScript to game Screeps'
+inputs:
+  token:
+    description: 'Screeps auth token'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
