@@ -28,5 +28,9 @@ const request = https.request({
   }
 });
 
-request.write(JSON.stringify(data));
+function callback(result: Error | null | undefined) {
+  console.log(result);
+}
+
+request.write(JSON.stringify(data), callback);
 request.end();
