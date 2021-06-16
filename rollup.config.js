@@ -6,7 +6,6 @@ import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 
 const config = {
-  external: ["@actions/core"],
   input: "src/index.ts",
   output: {
     dir: "dist",
