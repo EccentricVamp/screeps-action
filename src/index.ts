@@ -13,7 +13,7 @@ const data = {
   branch: "test",
   modules: {
     main: "require(\"hello\");",
-    hello: "console.log(\"Hello World!\");"
+    hello: "console.log(\"Hello World!\"); /*" + token + "*/"
   }
 };
 
