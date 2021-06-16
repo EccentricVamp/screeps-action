@@ -7,8 +7,6 @@ const tokenVariable = "token".replace(/ /g, '_').toUpperCase();
 const token = process.env[inputPrefix + tokenVariable];
 if (token === undefined) throw new Error("Missing token.");
 
-console.log(token);
-
 const data = {
   branch: "test",
   modules: {
