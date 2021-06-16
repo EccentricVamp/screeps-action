@@ -5,10 +5,8 @@ import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 
-/**
- * @type {import("rollup").RollupOptions}
- */
 const config = {
+  external: ["@actions/core"],
   input: "src/index.ts",
   output: {
     dir: "dist",
