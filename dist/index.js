@@ -8,9 +8,8 @@ const tokenVariable = "token".replace(/ /g, '_').toUpperCase();
 const token = process.env[inputPrefix + tokenVariable];
 if (token === undefined)
     throw new Error("Missing token.");
-console.log(token);
 const data = {
-    branch: "test",
+    branch: "default",
     modules: {
         main: "require(\"hello\");",
         hello: "console.log(\"Hello World!\");"
@@ -21,10 +20,15 @@ const request = https.request({
     port: 443,
     path: "/api/user/code",
     method: "POST",
-    auth: token,
     headers: {
-        "Content-Type": "application/json; charset=utf-8"
+        "Content-Type": "application/json; charset=utf-8",
+        'X-Token': token,
+        'X-Username': token
     }
 });
-request.write(JSON.stringify(data));
+request.write(JSON.stringify(data), throwOnError);
 request.end();
+function throwOnError(result) {
+    if (result instanceof Error)
+        throw result;
+}

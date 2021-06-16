@@ -1,6 +1,7 @@
 import * as https from "https";
 
 const inputPrefix = "INPUT_";
+
 // Replace spaces with underscores and convert to upper case.
 const tokenVariable = "token".replace(/ /g, '_').toUpperCase();
 
@@ -8,10 +9,10 @@ const token = process.env[inputPrefix + tokenVariable];
 if (token === undefined) throw new Error("Missing token.");
 
 const data = {
-  branch: "test",
+  branch: "default",
   modules: {
     main: "require(\"hello\");",
-    hello: "console.log(\"Hello World!\"); /*" + token + "*/"
+    hello: "console.log(\"Hello World!\");"
   }
 };
 
@@ -20,15 +21,16 @@ const request = https.request({
   port: 443,
   path: "/api/user/code",
   method: "POST",
-  auth: token,
   headers: {
-    "Content-Type": "application/json; charset=utf-8"
+    "Content-Type": "application/json; charset=utf-8",
+    'X-Token': token,
+    'X-Username': token
   }
 });
 
-function callback(result: Error | null | undefined) {
-  console.log(result);
-}
-
-request.write(JSON.stringify(data), callback);
+request.write(JSON.stringify(data), throwOnError);
 request.end();
+
+function throwOnError(result: Error | null | undefined) {
+  if (result instanceof Error) throw result;
+}
