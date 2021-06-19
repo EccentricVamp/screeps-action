@@ -22,7 +22,7 @@ let branch = input("branch");
 if (branch === undefined) branch = BRANCH_DEFAULT;
 else branch = branch.replace(BRANCH_PREFIX, "");
 
-const token = input("token");
+const token = "b87011c5-a6aa-4625-ad00-84c3659b519c"; //input("token");
 if (token === undefined) throw new Error ("Missing input: token");
 
 const modules = new Map<string, string>()
