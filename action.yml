@@ -4,6 +4,8 @@ inputs:
   token:
     description: 'Screeps auth token'
     required: true
+  branch:
+    description: 'Target branch for deployment'
 runs:
   using: 'node12'
   main: 'dist/index.js'
