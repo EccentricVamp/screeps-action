@@ -9,7 +9,7 @@ const config = {
   input: "src/index.ts",
   output: {
     dir: "dist",
-    format: "cjs",
+    format: "es",
     interop: "esModule",
     exports: "auto"
   },
