@@ -61,7 +61,7 @@ function getModules(
 function deploy(modules: any) {
   const data = {
     branch: branch,
-    modules: modules
+    modules: Object.fromEntries(modules)
   };
 
   process.stdout.write(`Modules: ${JSON.stringify(data.modules)}${os.EOL}`);
