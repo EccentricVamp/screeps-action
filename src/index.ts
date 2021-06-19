@@ -63,7 +63,7 @@ function deploy(modules: Map<string, string>) {
     branch: branch,
     modules: modules
   };
-  process.stdout.write(`Data: ${data.toString()}${os.EOL}`)
+  process.stdout.write(`Modules: ${data.modules.toString()}${os.EOL}`)
 
   const request = https.request({
     hostname: "screeps.com",
