@@ -1,19 +1,39 @@
-'use strict';
+import * as https from 'https';
+import * as path from 'path';
+import { promises } from 'fs';
 
-var https = require('https');
-
-const inputPrefix = "INPUT_";
-// Replace spaces with underscores and convert to upper case.
-const tokenVariable = "token".replace(/ /g, '_').toUpperCase();
-const token = process.env[inputPrefix + tokenVariable];
+const BRANCH_PREFIX = "refs/heads/";
+const BRANCH_DEFAULT = "default";
+const INPUT_PREFIX = "INPUT_";
+function input(inputName) {
+    const key = inputName
+        .replace(/ /g, '_') // Replace spaces with underscores
+        .toUpperCase();
+    return process.env[INPUT_PREFIX + key];
+}
+let branch = input("branch");
+if (branch === undefined)
+    branch = BRANCH_DEFAULT;
+else
+    branch = branch.replace(BRANCH_PREFIX, "");
+const token = input("token");
 if (token === undefined)
-    throw new Error("Missing token.");
-const data = {
-    branch: "default",
-    modules: {
-        main: "require(\"hello\");",
-        hello: "console.log(\"Hello World!\");"
+    throw new Error("Missing input: token");
+const modules = new Map();
+const root = "dist";
+const directory = await promises.opendir(root);
+for await (const entry of directory) {
+    if (entry.isFile() && entry.name.endsWith(".js")) {
+        const entryPath = path.join(directory.path, entry.name);
+        const contents = await promises.readFile(entryPath, 'utf8');
+        // Trim ".js" from the end
+        const name = entry.name.replace(/\.js$/i, "");
+        modules.set(name, contents);
     }
+}
+const data = {
+    branch: branch,
+    modules: modules
 };
 const request = https.request({
     hostname: "screeps.com",
@@ -22,13 +42,12 @@ const request = https.request({
     method: "POST",
     headers: {
         "Content-Type": "application/json; charset=utf-8",
-        'X-Token': token,
-        'X-Username': token
+        "X-Token": token,
+        "X-Username": token
     }
 });
-request.write(JSON.stringify(data), throwOnError);
-request.end();
-function throwOnError(result) {
+request.write(JSON.stringify(data), result => {
     if (result instanceof Error)
         throw result;
-}
+});
+request.end();
