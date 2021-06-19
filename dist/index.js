@@ -39,8 +39,10 @@ function getModules(prefix, directory) {
             fs.readFile(entryPath, 'utf8', (error, contents) => {
                 if (error !== null)
                     console.error(error);
-                else
+                else {
+                    process.stdout.write(`Contents: ${contents}${os.EOL}`);
                     modules.set(name, contents);
+                }
             });
         }
     }
@@ -52,9 +54,6 @@ function deploy(modules) {
         branch: branch,
         modules: modules
     };
-    for (const pair of data.modules) {
-        process.stdout.write(`Module: ${pair[0]} - ${pair[1]}${os.EOL}`);
-    }
     const request = https.request({
         hostname: "screeps.com",
         port: 443,
