@@ -52,7 +52,9 @@ function deploy(modules) {
         branch: branch,
         modules: modules
     };
-    process.stdout.write(`Modules: ${data.modules.toString()}${os.EOL}`);
+    for (const pair of data.modules) {
+        process.stdout.write(`Module: ${pair[0]} - ${pair[1]}${os.EOL}`);
+    }
     const request = https.request({
         hostname: "screeps.com",
         port: 443,
