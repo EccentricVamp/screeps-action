@@ -1,5 +1,6 @@
 import * as https from "https";
 import * as path from "path";
+import * as os from "os";
 import {
   Dir as Directory,
   opendir as openDirectory,
@@ -37,8 +38,12 @@ function getModules(
   prefix: string,
   directory: Directory
 ) {
+  process.stdout.write(`Directory: ${Directory}${os.EOL}`)
+
   let entry;
   while ((entry = directory.readSync()) !== null) {
+    process.stdout.write(`Entry: ${entry.name}${os.EOL}`)
+
     if (entry.isFile() && entry.name.endsWith(".js")) {
       const entryPath = path.join(directory.path, entry.name);
       const name = `${prefix}.${entry.name.replace(/\.js$/i, "")}`;
@@ -58,6 +63,7 @@ function deploy(modules: Map<string, string>) {
     branch: branch,
     modules: modules
   };
+  process.stdout.write(`Data: ${data}${os.EOL}`)
 
   const request = https.request({
     hostname: "screeps.com",
