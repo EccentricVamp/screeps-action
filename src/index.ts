@@ -38,7 +38,7 @@ function getModules(
   prefix: string,
   directory: Directory
 ) {
-  process.stdout.write(`Directory: ${Directory}${os.EOL}`)
+  process.stdout.write(`Directory: ${directory.path}${os.EOL}`)
 
   let entry;
   while ((entry = directory.readSync()) !== null) {
@@ -63,7 +63,7 @@ function deploy(modules: Map<string, string>) {
     branch: branch,
     modules: modules
   };
-  process.stdout.write(`Data: ${data}${os.EOL}`)
+  process.stdout.write(`Data: ${data.toString()}${os.EOL}`)
 
   const request = https.request({
     hostname: "screeps.com",
