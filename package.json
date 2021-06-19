@@ -5,7 +5,8 @@
   "license": "Unlicense",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup --config",
+    "watch": "rollup --config --watch"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
