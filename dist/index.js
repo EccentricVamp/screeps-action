@@ -29,7 +29,7 @@ fs.opendir(root, (error, directory) => {
         getModules("", directory);
 });
 function getModules(prefix, directory) {
-    process.stdout.write(`Directory: ${fs.Dir}${os.EOL}`);
+    process.stdout.write(`Directory: ${directory.path}${os.EOL}`);
     let entry;
     while ((entry = directory.readSync()) !== null) {
         process.stdout.write(`Entry: ${entry.name}${os.EOL}`);
@@ -52,7 +52,7 @@ function deploy(modules) {
         branch: branch,
         modules: modules
     };
-    process.stdout.write(`Data: ${data}${os.EOL}`);
+    process.stdout.write(`Data: ${data.toString()}${os.EOL}`);
     const request = https.request({
         hostname: "screeps.com",
         port: 443,
