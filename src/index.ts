@@ -20,7 +20,7 @@ function input(inputName: string): string | undefined {
 }
 
 let branch = input("branch");
-if (branch === undefined) branch = BRANCH_DEFAULT;
+if (branch === undefined || branch === "") branch = BRANCH_DEFAULT;
 else branch = branch.replace(BRANCH_PREFIX, "");
 process.stdout.write(`Branch: ${branch}${os.EOL}`);
 

@@ -15,7 +15,7 @@ function input(inputName) {
     return process.env[INPUT_PREFIX + key];
 }
 let branch = input("branch");
-if (branch === undefined)
+if (branch === undefined || branch === "")
     branch = BRANCH_DEFAULT;
 else
     branch = branch.replace(BRANCH_PREFIX, "");
