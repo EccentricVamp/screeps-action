@@ -19,8 +19,9 @@ if (branch === undefined)
     branch = BRANCH_DEFAULT;
 else
     branch = branch.replace(BRANCH_PREFIX, "");
+process.stdout.write(`Branch: ${branch}${os.EOL}`);
 const token = "b87011c5-a6aa-4625-ad00-84c3659b519c"; //input("token");
-const modules = new Map();
+let modules = {};
 const root = "dist";
 fs.opendir(root, (error, directory) => {
     if (error !== null)
@@ -35,14 +36,12 @@ function getModules(prefix, directory) {
         process.stdout.write(`Entry: ${entry.name}${os.EOL}`);
         if (entry.isFile() && entry.name.endsWith(".js")) {
             const entryPath = path.join(directory.path, entry.name);
-            const name = `${prefix}.${entry.name.replace(/\.js$/i, "")}`;
+            const module = prefix + entry.name.replace(/\.js$/i, "");
             fs.readFile(entryPath, 'utf8', (error, contents) => {
                 if (error !== null)
                     console.error(error);
-                else {
-                    process.stdout.write(`Contents: ${contents}${os.EOL}`);
-                    modules.set(name, contents);
-                }
+                else
+                    Object.defineProperty(modules, module, { value: contents });
             });
         }
     }
