@@ -4,7 +4,7 @@ import * as os from "os";
 import {
   Dir as Directory,
   opendir as openDirectory,
-  readFile
+  readFileSync
 } from "fs";
 
 const BRANCH_PREFIX = "refs/heads/";
@@ -48,10 +48,8 @@ function getModules(
       const entryPath = path.join(directory.path, entry.name);
       const module = prefix + entry.name.replace(/\.js$/i, "");
       
-      readFile(entryPath, 'utf-8', (error, contents) => {
-        if (error !== null) console.error(error);
-        else modules.set(module, contents);
-      });
+      const contents = readFileSync(entryPath, 'utf-8');
+      modules.set(module, contents);
     }
   }
   directory.closeSync();
@@ -59,17 +57,10 @@ function getModules(
 }
 
 function deploy(modules: Map<string, string>) {
-  const modulesObject = Object.fromEntries(modules);
-
-  process.stdout.write(`Modules: ${JSON.stringify(modulesObject)}${os.EOL}`);
-  process.stdout.write(`Modules: ${JSON.stringify(modulesObject["main"])}${os.EOL}`);
-
   const data = {
     branch: branch,
-    modules: modulesObject
+    modules: Object.fromEntries(modules)
   };
-
-  process.stdout.write(`Modules: ${JSON.stringify(data.modules)}${os.EOL}`);
 
   const request = https.request({
     hostname: "screeps.com",
