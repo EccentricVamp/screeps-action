@@ -2,6 +2,7 @@
 
 var https = require('https');
 var path = require('path');
+var os = require('os');
 var fs = require('fs');
 
 const BRANCH_PREFIX = "refs/heads/";
@@ -18,9 +19,7 @@ if (branch === undefined)
     branch = BRANCH_DEFAULT;
 else
     branch = branch.replace(BRANCH_PREFIX, "");
-const token = input("token");
-if (token === undefined)
-    throw new Error("Missing input: token");
+const token = "b87011c5-a6aa-4625-ad00-84c3659b519c"; //input("token");
 const modules = new Map();
 const root = "dist";
 fs.opendir(root, (error, directory) => {
@@ -30,8 +29,10 @@ fs.opendir(root, (error, directory) => {
         getModules("", directory);
 });
 function getModules(prefix, directory) {
+    process.stdout.write(`Directory: ${fs.Dir}${os.EOL}`);
     let entry;
     while ((entry = directory.readSync()) !== null) {
+        process.stdout.write(`Entry: ${entry.name}${os.EOL}`);
         if (entry.isFile() && entry.name.endsWith(".js")) {
             const entryPath = path.join(directory.path, entry.name);
             const name = `${prefix}.${entry.name.replace(/\.js$/i, "")}`;
@@ -51,6 +52,7 @@ function deploy(modules) {
         branch: branch,
         modules: modules
     };
+    process.stdout.write(`Data: ${data}${os.EOL}`);
     const request = https.request({
         hostname: "screeps.com",
         port: 443,
