@@ -7,4 +7,5 @@ inputs:
   branch:
     description: 'Target branch for deployment'
 runs:
+  using: node12
   main: 'dist/index.js'

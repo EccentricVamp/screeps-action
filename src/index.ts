@@ -1,6 +1,10 @@
 import * as https from "https";
 import * as path from "path";
-import { promises as fsPromises } from "fs";
+import {
+  Dir as Directory,
+  opendir as openDirectory,
+  readFile
+} from "fs";
 
 const BRANCH_PREFIX = "refs/heads/";
 const BRANCH_DEFAULT = "default";
@@ -23,38 +27,53 @@ if (token === undefined) throw new Error ("Missing input: token");
 
 const modules = new Map<string, string>()
 const root = "dist";
-const directory = await fsPromises.opendir(root);
-for await (const entry of directory) {
-  if (entry.isFile() && entry.name.endsWith(".js")) {
-    const entryPath = path.join(directory.path, entry.name);
-    const contents = await fsPromises.readFile(entryPath, 'utf8');
 
-    // Trim ".js" from the end
-    const name = entry.name.replace(/\.js$/i, "");
-    
-    modules.set(name, contents);
+openDirectory(root, (error, directory) => {
+  if (error !== null) console.error(error);
+  else getModules("", directory);
+});
+
+function getModules(
+  prefix: string,
+  directory: Directory
+) {
+  let entry;
+  while ((entry = directory.readSync()) !== null) {
+    if (entry.isFile() && entry.name.endsWith(".js")) {
+      const entryPath = path.join(directory.path, entry.name);
+      const name = `${prefix}.${entry.name.replace(/\.js$/i, "")}`;
+      
+      readFile(entryPath, 'utf8', (error, contents) => {
+        if (error !== null) console.error(error);
+        else modules.set(name, contents);
+      });
+    }
   }
+  directory.closeSync();
+  deploy(modules)
 }
 
-const data = {
-  branch: branch,
-  modules: modules
-};
+function deploy(modules: Map<string, string>) {
+  const data = {
+    branch: branch,
+    modules: modules
+  };
 
-const request = https.request({
-  hostname: "screeps.com",
-  port: 443,
-  path: "/api/user/code",
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json; charset=utf-8",
-    "X-Token": token,
-    "X-Username": token
-  }
-});
+  const request = https.request({
+    hostname: "screeps.com",
+    port: 443,
+    path: "/api/user/code",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Token": token,
+      "X-Username": token
+    }
+  });
 
-request.write(JSON.stringify(data), result => {
-  if (result instanceof Error) throw result;
-});
-request.end();
+  request.write(JSON.stringify(data), result => {
+    if (result instanceof Error) throw result;
+  });
+  request.end();
+}
 
