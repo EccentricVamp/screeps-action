@@ -27,9 +27,7 @@ process.stdout.write(`Branch: ${branch}${os.EOL}`);
 const token = "b87011c5-a6aa-4625-ad00-84c3659b519c"; //input("token");
 if (token === undefined) throw new Error ("Missing input: token");
 
-const modules = new Map<string, string>();
 const root = "dist";
-
 openDirectory(root, (error, directory) => {
   if (error !== null) console.error(error);
   else getModules("", directory);
@@ -40,6 +38,7 @@ function getModules(
   directory: Directory
 ) {
   process.stdout.write(`Directory: ${directory.path}${os.EOL}`)
+  const modules = new Map<string, string>();
 
   let entry;
   while ((entry = directory.readSync()) !== null) {

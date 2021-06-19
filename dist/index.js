@@ -21,7 +21,6 @@ else
     branch = branch.replace(BRANCH_PREFIX, "");
 process.stdout.write(`Branch: ${branch}${os.EOL}`);
 const token = "b87011c5-a6aa-4625-ad00-84c3659b519c"; //input("token");
-const modules = new Map();
 const root = "dist";
 fs.opendir(root, (error, directory) => {
     if (error !== null)
@@ -31,6 +30,7 @@ fs.opendir(root, (error, directory) => {
 });
 function getModules(prefix, directory) {
     process.stdout.write(`Directory: ${directory.path}${os.EOL}`);
+    const modules = new Map();
     let entry;
     while ((entry = directory.readSync()) !== null) {
         process.stdout.write(`Entry: ${entry.name}${os.EOL}`);
