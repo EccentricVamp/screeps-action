@@ -21,7 +21,7 @@ else
     branch = branch.replace(BRANCH_PREFIX, "");
 process.stdout.write(`Branch: ${branch}${os.EOL}`);
 const token = "b87011c5-a6aa-4625-ad00-84c3659b519c"; //input("token");
-let modules = {};
+const modules = new Map();
 const root = "dist";
 fs.opendir(root, (error, directory) => {
     if (error !== null)
@@ -41,7 +41,7 @@ function getModules(prefix, directory) {
                 if (error !== null)
                     console.error(error);
                 else
-                    Object.defineProperty(modules, module, { value: contents });
+                    modules.set(module, contents);
             });
         }
     }
@@ -53,6 +53,7 @@ function deploy(modules) {
         branch: branch,
         modules: modules
     };
+    process.stdout.write(`Modules: ${JSON.stringify(data.modules)}${os.EOL}`);
     const request = https.request({
         hostname: "screeps.com",
         port: 443,
