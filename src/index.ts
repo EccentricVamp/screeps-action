@@ -48,7 +48,7 @@ function getModules(
       const entryPath = path.join(directory.path, entry.name);
       const module = prefix + entry.name.replace(/\.js$/i, "");
       
-      readFile(entryPath, 'utf8', (error, contents) => {
+      readFile(entryPath, 'utf-8', (error, contents) => {
         if (error !== null) console.error(error);
         else modules.set(module, contents);
       });
@@ -58,10 +58,15 @@ function getModules(
   deploy(modules);
 }
 
-function deploy(modules: any) {
+function deploy(modules: Map<string, string>) {
+  const modulesObject = Object.fromEntries(modules);
+
+  process.stdout.write(`Modules: ${JSON.stringify(modulesObject)}${os.EOL}`);
+  process.stdout.write(`Modules: ${JSON.stringify(modulesObject["main"])}${os.EOL}`);
+
   const data = {
     branch: branch,
-    modules: Object.fromEntries(modules)
+    modules: modulesObject
   };
 
   process.stdout.write(`Modules: ${JSON.stringify(data.modules)}${os.EOL}`);

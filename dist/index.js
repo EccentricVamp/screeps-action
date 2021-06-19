@@ -37,7 +37,7 @@ function getModules(prefix, directory) {
         if (entry.isFile() && entry.name.endsWith(".js")) {
             const entryPath = path.join(directory.path, entry.name);
             const module = prefix + entry.name.replace(/\.js$/i, "");
-            fs.readFile(entryPath, 'utf8', (error, contents) => {
+            fs.readFile(entryPath, 'utf-8', (error, contents) => {
                 if (error !== null)
                     console.error(error);
                 else
@@ -49,9 +49,12 @@ function getModules(prefix, directory) {
     deploy(modules);
 }
 function deploy(modules) {
+    const modulesObject = Object.fromEntries(modules);
+    process.stdout.write(`Modules: ${JSON.stringify(modulesObject)}${os.EOL}`);
+    process.stdout.write(`Modules: ${JSON.stringify(modulesObject["main"])}${os.EOL}`);
     const data = {
         branch: branch,
-        modules: Object.fromEntries(modules)
+        modules: modulesObject
     };
     process.stdout.write(`Modules: ${JSON.stringify(data.modules)}${os.EOL}`);
     const request = https.request({
