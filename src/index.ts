@@ -47,7 +47,7 @@ async function getModules(
     process.stdout.write(`Entry: ${entry.name}${os.EOL}`)
     const entryPath = join(directory.path, entry.name);
 
-    if (entry.isFile() && entry.name.endsWith(".js")) {
+    if (entry.isFile()) {
       const module = prefix + entry.name.replace(/\.js$/i, "");
       const contents = await fs.readFile(entryPath, 'utf-8');
       modules.set(module, contents);
